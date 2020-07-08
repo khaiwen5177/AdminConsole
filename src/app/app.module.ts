@@ -11,6 +11,9 @@ import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { environment } from '../environments/environment';
 import {
   NbChatModule,
   NbDatepickerModule,
@@ -20,6 +23,9 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+
+import * as firebase from 'firebase';
+firebase.initializeApp(environment.firebase);
 
 @NgModule({
   declarations: [AppComponent],
@@ -39,6 +45,8 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    AngularFireModule.initializeApp(environment.firebase, 'My-pi'),
+    AngularFireDatabaseModule
   ],
   bootstrap: [AppComponent],
 })

@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-lg-6">
+  <!--<div class="col-lg-6">
     <nb-card>
       <nb-card-header>Pie</nb-card-header>
       <nb-card-body>
@@ -14,16 +14,17 @@
         <ngx-chartjs-bar></ngx-chartjs-bar>
       </nb-card-body>
     </nb-card>
-  </div>
-  <div class="col-lg-6">
+  </div>-->
+  <!--<div class="col-lg-6" *ngFor="let data of this.data; let i = index">-->
+  <div class="col-lg-12">
     <nb-card>
-      <nb-card-header>Line</nb-card-header>
+      <nb-card-header>Patient Temperature Dashboard ({{dateTime}})</nb-card-header>
       <nb-card-body>
         <ngx-chartjs-line></ngx-chartjs-line>
       </nb-card-body>
     </nb-card>
   </div>
-  <div class="col-lg-6">
+  <!--<div class="col-lg-6">
     <nb-card>
       <nb-card-header>Multiple x-axis</nb-card-header>
       <nb-card-body>
@@ -46,5 +47,5 @@
         <ngx-chartjs-radar></ngx-chartjs-radar>
       </nb-card-body>
     </nb-card>
-  </div>
+  </div>-->
 </div>
