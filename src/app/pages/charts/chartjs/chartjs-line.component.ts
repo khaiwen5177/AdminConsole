@@ -5,6 +5,7 @@ import { DatePipe } from '@angular/common';
 //import { Component, OnInit, ViewChild } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { AngularFireDatabase } from 'angularfire2/database';
+import { isUndefined } from 'util';
 
 @Component({
   selector: 'ngx-chartjs-line',
@@ -23,8 +24,10 @@ export class ChartjsLineComponent implements OnDestroy {
   temp: any = [];
 
 
-  patients: any = [];
+  patients1: any = [];
   dateTimeList: any = [];
+
+  temperatureList: any[] = [];
   temperatureList1: any = [];
   temperatureList2: any = [];
   tempColor1: any;
@@ -32,10 +35,7 @@ export class ChartjsLineComponent implements OnDestroy {
 
   constructor(private theme: NbThemeService, public datepipe: DatePipe, public db: AngularFireDatabase) {
     this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-      
-      let temp_patient: any = [];
-      const colors: any = config.variables;
-      const chartjs: any = config.variables.chartjs;
+
 
       /*firebase.database().ref().child("rasp-pi12345/" + "temperature").on('value', (shapshot) => {
         shapshot.forEach((child) => {
@@ -73,219 +73,75 @@ export class ChartjsLineComponent implements OnDestroy {
       /*DatabaseReference ref = users.child("GTjrWgpKjoeXUt4JdBJTYP1JkVT2/fnBOM...`");
       ref.orderByKey().limitToLast(1).addChildEventListener(...*/
 
-      firebase.database().ref().on('value', (snap) => {
-        snap.forEach((child) => {
+    });
 
-          //var dbref = firebase.database().ref("rasp-pi12345/" + child.key).limitToLast(1);
-          //console.log(dbref)
+    firebase.database().ref().on('value', (snap) => {
+      snap.forEach((child) => {
 
-          this.temp.push(
-            {
-              patient_name: child.key,
-              date: child.val(),
-            });
-        });
+        //var dbref = firebase.database().ref("rasp-pi12345/" + child.key).limitToLast(1);
+        //console.log(dbref)
+        //console.log(child.key)
+        //console.log(child.key)
+        this.temp.push(child.key)
 
-        let i = 0;
 
-        this.temp.forEach(function (value1) {
-
-          let info: any = {};
-          info.label = value1.patient_name;
-          info.data = [];
-
-          console.log(info.label);
-          //console.log(value1.patient_name);
-          //let temp_temperatureList = value1.date[Object.keys(value1.date)[4]];
-          let temp_temperatureList = value1.date;
-          //console.log(Object.keys(temp_temperatureList).length);
-          //console.log(Object.values(temp_temperatureList).length);
-          console.log(Object.values(temp_temperatureList));
-          //console.log(value1.date[Object.keys(value1.date)[0]]);
-          //console.log(value1.date);
-
-          Object.values(temp_temperatureList).forEach(function (value2) {
-            //console.log(temp_temperatureList.length)
-            var iterator = Object.values(value2).values();
-            for (let celcius of iterator) {
-            info.data.push(celcius)
-            console.log(info.data); 
-           } 
-          });
-
-          /*console.log(info.data.length);
-          while(info.data.length !== 1){
-            info.data.shift()
-          }
-          console.log(info.data.length);
-          console.log("im here: " + info.data); */
-
-          info.backgroundColor = NbColorHelper.hexToRgbA(colors.primary, 0.3)
-          info.borderColor = colors.primary
-          temp_patient.push(info);
-          console.log(temp_patient);
-        });
-
-        /*this.patients =
-        [{
-          data: this.temperatureList1,
-          label: 'Kelvin',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
-          borderColor: colors.primary,
-        }, {
-          data: this.temperatureList2,
-          label: 'James',
-          backgroundColor: NbColorHelper.hexToRgbA(this.tempColor2, 0.3),
-          borderColor: this.tempColor2,
-        }]*/
 
       });
-
-
-
-
-      /*for (let i = 0; i < this.temp.lenght; i++) {
-        this.temp_patient
-      }*/
-
-
-
-      //console.log(firebase.database().ref().child)
-      /*console.log(this.temp);
-
-      const colors: any = config.variables;
-      const chartjs: any = config.variables.chartjs;*/
-
-      /*this.data = {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        datasets: [{
-          data: [65, 59, 80, 81, 56, 55, 40],
-          label: 'Series A',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
-          borderColor: colors.primary,
-        }, {
-          data: [28, 48, 40, 19, 86, 27, 90],
-          label: 'Series B',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.3),
-          borderColor: colors.danger,
-        }, {
-          data: [18, 48, 77, 9, 100, 27, 40],
-          label: 'Series C',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.info, 0.3),
-          borderColor: colors.info,
-        },
-        ],
-      };*/
-
-      /*this.dateTime = new Date();
-      this.dateTimeList.push(this.datepipe.transform(this.dateTime, 'hh:mm:ss aa'));
-
-      if(this.temperatureList1.length < 6){
-        this.temperatureList1.push(this.genRand(35.5, 38.5, 1))
-      }else{
-        this.dateTimeList.shift()
-        this.temperatureList2.shift()
-        this.temperatureList1.push(this.genRand(35.5, 38.5, 1))
-      }
-
-      //this.temperatureList1.push(this.genRand(35.5, 38.5, 1))
-
-      if (this.temperatureList1[this.temperatureList1.length - 1] < 37.5) {
-        this.tempColor1 = colors.primary;
-      } else {
-        this.tempColor1 = colors.danger;
-      }
-
-      if(this.temperatureList2.length < 6){
-        this.temperatureList2.push(this.genRand(35.5, 38.5, 1))
-      }else{
-        this.dateTimeList.shift()
-        this.temperatureList2.shift()
-        this.temperatureList2.push(this.genRand(35.5, 38.5, 1))
-      }
-
-      if (this.temperatureList2[this.temperatureList1.length - 1] < 37.5) {
-        this.tempColor2 = colors.primary;
-      } else {
-        this.tempColor2 = colors.danger;
-      }
-
-      this.patients =
-        [{
-          data: this.temperatureList1,
-          label: 'Kelvin',
-          backgroundColor: NbColorHelper.hexToRgbA(this.tempColor1, 0.3),
-          borderColor: this.tempColor1,
-        }, {
-          data: this.temperatureList2,
-          label: 'James',
-          backgroundColor: NbColorHelper.hexToRgbA(this.tempColor2, 0.3),
-          borderColor: this.tempColor2,
-        }]
-
-      this.information = {
-        labels: this.dateTimeList,
-        datasets: this.patients
-      }; */
-
-      /*this.information = [
-        {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'],
-        datasets: [{
-          data: [65, 59, 80, 81, 56, 55, 40, 100],
-          label: 'Kelvin',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
-          borderColor: colors.primary,
-        },
-        ],
-      },
-      {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August'],
-        datasets: [{
-          data: [28, 48, 40, 19, 86, 27, 90, 100],
-          label: 'James',
-          backgroundColor: NbColorHelper.hexToRgbA(colors.danger, 0.3),
-          borderColor: colors.danger,
-        },
-        ],
-      },
-    ]*/
-
-      /*  this.options = {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [
-              {
-                gridLines: {
-                  display: true,
-                  color: chartjs.axisLineColor,
-                },
-                ticks: {
-                  fontColor: chartjs.textColor,
-                },
-              },
-            ],
-            yAxes: [
-              {
-                gridLines: {
-                  display: true,
-                  color: chartjs.axisLineColor,
-                },
-                ticks: {
-                  fontColor: chartjs.textColor,
-                },
-              },
-            ],
-          },
-          legend: {
-            labels: {
-              fontColor: chartjs.textColor,
-            },
-          },
-        };*/
-      this.updateRecursive();
+      //console.log(this.temp)
+      //console.log("xxx")
     });
+
+    this.getPatientName();
+    this.getPatientCel();
+
+  }
+
+  getPatientName() {
+
+      var i = 0
+
+      this.temp.forEach((patient_name) => {
+        firebase.database().ref(patient_name).orderByKey().limitToLast(1).on('value', (snap) => {
+          snap.forEach((child) => {
+
+            //var dbref = firebase.database().ref("rasp-pi12345/" + child.key).limitToLast(1);
+            //console.log(dbref)
+            //console.log(snap.key)
+            //console.log(child.key)
+            //console.log(child.val().Cel)
+
+            //this.temperatureList.push([child.val().Cel])
+            //this.temperatureList[i] = []
+            //this.temperatureList[i].push(child.val().Cel)
+            //console.log(this.temperatureList[i])
+
+            if(this.temperatureList[i] === undefined){
+              this.temperatureList[i] = []
+              this.temperatureList[i].push(child.val().Cel)
+            }else{
+              this.temperatureList[i].push(child.val().Cel)
+            }
+
+            //console.log(this.temperatureList)
+
+
+            //this.temperatureList[i].push(36.0)
+            //console.log(this.temperatureList[i].length)
+            i++;
+
+          });
+        });
+      });
+      
+      console.log(this.temperatureList)
+      
+
+    this.timer = setTimeout(() => {
+      this.getPatientName();
+    }, 5000);
+  }
+
+  getPatientCel() {
 
   }
 
@@ -341,7 +197,7 @@ export class ChartjsLineComponent implements OnDestroy {
 
 
 
-      this.patients =
+      this.patients1 =
         [{
           data: this.temperatureList1,
           label: 'Kelvin',
@@ -356,7 +212,7 @@ export class ChartjsLineComponent implements OnDestroy {
 
       this.information = {
         labels: this.dateTimeList,
-        datasets: this.patients
+        datasets: this.patients1
       };
 
       this.options = {
