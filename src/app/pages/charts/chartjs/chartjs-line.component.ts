@@ -20,16 +20,19 @@ export class ChartjsLineComponent implements OnDestroy {
   themeSubscription: any;
   dateTime: any;
   timer;
+  tempCount: any = 0;
+  checkSuccess: any = 0;
 
   temp: any = [];
 
-
+  patients: any = [];
   patients1: any = [];
   dateTimeList: any = [];
 
   temperatureList: any[] = [];
   temperatureList1: any = [];
   temperatureList2: any = [];
+  tempColor: any;
   tempColor1: any;
   tempColor2: any;
 
@@ -91,59 +94,51 @@ export class ChartjsLineComponent implements OnDestroy {
       //console.log("xxx")
     });
 
+    //this.updateRecursive();
     this.getPatientName();
-    this.getPatientCel();
+   
 
   }
+
+
 
   getPatientName() {
 
-      var i = 0
+    //console.log(this.temp)
+    //var i = 0
 
-      this.temp.forEach((patient_name) => {
-        firebase.database().ref(patient_name).orderByKey().limitToLast(1).on('value', (snap) => {
-          snap.forEach((child) => {
+    //this.temp.forEach((patient_name) => {
+    for(var i = 0; i < this.temp.length ; i++) { 
+      firebase.database().ref(this.temp[i]).orderByKey().limitToLast(1).on('value', (snap) => {
+        snap.forEach((child) => {
 
-            //var dbref = firebase.database().ref("rasp-pi12345/" + child.key).limitToLast(1);
-            //console.log(dbref)
-            //console.log(snap.key)
-            //console.log(child.key)
-            //console.log(child.val().Cel)
-
-            //this.temperatureList.push([child.val().Cel])
-            //this.temperatureList[i] = []
-            //this.temperatureList[i].push(child.val().Cel)
-            //console.log(this.temperatureList[i])
-
-            if(this.temperatureList[i] === undefined){
-              this.temperatureList[i] = []
-              this.temperatureList[i].push(child.val().Cel)
-            }else{
-              this.temperatureList[i].push(child.val().Cel)
-            }
-
-            //console.log(this.temperatureList)
-
-
-            //this.temperatureList[i].push(36.0)
+          if (this.temperatureList[i] === undefined) {
+            this.temperatureList[i] = []
+            this.temperatureList[i].push(child.val().Cel)
+          } else {
+            this.temperatureList[i].push(child.val().Cel)
             //console.log(this.temperatureList[i].length)
-            i++;
+            if (this.temperatureList[i].length > 10) {
+              this.temperatureList[i].shift()
+            }
+          }
 
-          });
+          
+
+          //i++;
+
         });
       });
-      
-      console.log(this.temperatureList)
-      
+    //});
+    }
 
-    this.timer = setTimeout(() => {
-      this.getPatientName();
-    }, 5000);
-  }
 
-  getPatientCel() {
+    console.log(this.temperatureList)
+
+      this.updateChart()
 
   }
+
 
   ngOnDestroy(): void {
     this.themeSubscription.unsubscribe();
@@ -164,56 +159,70 @@ export class ChartjsLineComponent implements OnDestroy {
 
       this.dateTime = new Date();
 
-      if (this.temperatureList1.length < 10) {
-        this.temperatureList1.push(this.genRand(35.5, 38.5, 1))
-        this.dateTimeList.push(this.datepipe.transform(this.dateTime, 'hh:mm:ss aa'));
-      } else {
+      console.log(this.temp)
+      var i = 0
+
+      this.temp.forEach((patient_name) => {
+        firebase.database().ref(patient_name).orderByKey().limitToLast(1).on('value', (snap) => {
+          snap.forEach((child) => {
+
+            console.log(patient_name)
+            console.log(i)
+            
+            if (this.temperatureList[i] === undefined) {
+              this.temperatureList[i] = []
+              this.temperatureList[i].push(child.val().Cel)
+            } else {
+              this.temperatureList[i].push(child.val().Cel)
+              if (this.temperatureList[i].length > 10) {
+                this.temperatureList[i].shift()
+              }
+            }
+
+
+
+            /*if (this.temperatureList[this.temperatureList.length - 1] < 37.5) {
+              this.tempColor = colors.primary;
+            } else {
+              this.tempColor = colors.danger;
+            }*/
+            //onsole.log(this.temp[i])
+            
+            this.patients[i] =
+            {
+              data: this.temperatureList[i],
+              label: this.temp[i],
+              backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
+              borderColor: colors.primary
+            }
+            //console.log(this.patients[i])
+            i++;
+
+          });
+        });
+      });
+
+      
+
+      this.dateTimeList.push(this.datepipe.transform(this.dateTime, 'hh:mm:ss aa'));
+      if(this.tempCount === 0){
         this.dateTimeList.shift()
-        this.temperatureList1.shift()
-        this.temperatureList1.push(this.genRand(35.5, 38.5, 1))
-        this.dateTimeList.push(this.datepipe.transform(this.dateTime, 'hh:mm:ss aa'));
+        this.tempCount = this.tempCount + 1
+      }
+      else{
+        if(this.dateTimeList.length > 10){
+          this.dateTimeList.shift(); 
+        }
       }
 
-      if (this.temperatureList1[this.temperatureList1.length - 1] < 37.5) {
-        this.tempColor1 = colors.primary;
-      } else {
-        this.tempColor1 = colors.danger;
-      }
-
-      if (this.temperatureList2.length < 10) {
-        this.temperatureList2.push(this.genRand(35.5, 38.5, 1))
-      } else {
-        this.dateTimeList.shift()
-        this.temperatureList2.shift()
-        this.temperatureList2.push(this.genRand(35.5, 38.5, 1))
-        this.dateTimeList.push(this.datepipe.transform(this.dateTime, 'hh:mm:ss aa'));
-      }
-
-      if (this.temperatureList2[this.temperatureList1.length - 1] < 37.5) {
-        this.tempColor2 = colors.primary;
-      } else {
-        this.tempColor2 = colors.danger;
-      }
-
-
-
-      this.patients1 =
-        [{
-          data: this.temperatureList1,
-          label: 'Kelvin',
-          backgroundColor: NbColorHelper.hexToRgbA(this.tempColor1, 0.3),
-          borderColor: this.tempColor1,
-        }, {
-          data: this.temperatureList2,
-          label: 'James',
-          backgroundColor: NbColorHelper.hexToRgbA(this.tempColor2, 0.3),
-          borderColor: this.tempColor2,
-        }]
 
       this.information = {
         labels: this.dateTimeList,
-        datasets: this.patients1
+        datasets: this.patients
       };
+      
+      //console.log(this.patients)
+      //console.log(this.temperatureList)
 
       this.options = {
         responsive: true,
@@ -254,9 +263,63 @@ export class ChartjsLineComponent implements OnDestroy {
       this.updateRecursive();
     }, 5000);
   }
+  
+  updateChart(){
+    
+    this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+
+      const colors: any = config.variables;
+      const chartjs: any = config.variables.chartjs;
+
+      this.dateTime = new Date();
+
+      //var i = 0
+
+      for(var i = 0; i < this.temp.length; i++ ){
+        //console.log("hi" + i)
+        this.patients[i] =
+        {
+          data: this.temperatureList[i],
+          label: this.temp[i],
+          backgroundColor: NbColorHelper.hexToRgbA(colors.primary, 0.3),
+          borderColor: colors.primary
+        }
+      }
+
+
+      this.dateTimeList.push(this.datepipe.transform(this.dateTime, 'hh:mm:ss aa'));
+      if(this.tempCount === 0){
+        this.dateTimeList.shift()
+        this.tempCount = this.tempCount + 1
+      }
+      else{
+        if(this.dateTimeList.length > 10){
+          this.dateTimeList.shift(); 
+        }
+      }
+
+
+      this.information = {
+        labels: this.dateTimeList,
+        datasets: this.patients
+      };
+      
+      //console.log(this.patients)
+      console.log(this.temperatureList)
+
+
+    });
+    this.timer = setTimeout(() => {
+      this.getPatientName()
+    }, 5000);
+  }
+
+ 
 
 
 
 }
+
+
 
 
