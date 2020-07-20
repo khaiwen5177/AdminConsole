@@ -18,3 +18,14 @@
 #### Step 6 : After install, enter "npm start"
 #### After successfully loaded, you see the link (localhost:4200), you can CTRL + click the link on the terminal or enter the link into browser(Google Chrome)
 
+# Project Screenshot
+#### All of the data on the first are dummy data 
+![Capturecv](https://user-images.githubusercontent.com/53253487/87956037-1ced7d80-cae1-11ea-9190-05f90e7bae44.JPG)
+
+#### To view the real time patient temperature chart, go to side menu and click on charts
+![charts](https://user-images.githubusercontent.com/53253487/87956394-94231180-cae1-11ea-82e3-055cd555cb9c.JPG)
+
+#### Charts interface:
+![Capturect](https://user-images.githubusercontent.com/53253487/87956602-d4828f80-cae1-11ea-9b88-8b89a326da5f.JPG)
+![CapturebElow](https://user-images.githubusercontent.com/53253487/87957007-4eb31400-cae2-11ea-9dc3-32384c9233f4.JPG)
+#### Note: If the patients temperature is higher or equal to 37 Cel, it will become red colour, below 37 Cel will display as blue
