@@ -12,4 +12,9 @@
 #### Step 2 : Clone this program (example location : desktop)
 #### Step 3 : Go to this folder, right click and look for "Open with Code"
 ![Capturex1](https://user-images.githubusercontent.com/53253487/87954705-4dccb300-cadf-11ea-9fe6-a19f6932152d.JPG)
-### Step 4 : 
+#### Step 4 : After opened VSCode look for the top menu bar and click new terminal
+![topmenu](https://user-images.githubusercontent.com/53253487/87954897-8f5d5e00-cadf-11ea-9542-7ad31f6c0459.JPG)
+#### Step 5 : Next, enter "npm install"
+#### Step 6 : After install, enter "npm start"
+#### After successfully loaded, you see the link (localhost:4200), you can CTRL + click the link on the terminal or enter the link into browser(Google Chrome)
+
