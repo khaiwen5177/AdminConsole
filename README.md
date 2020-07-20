@@ -11,3 +11,5 @@
 #### Step 1 : Suggested - Download VSCode (https://code.visualstudio.com/)
 #### Step 2 : Clone this program (example location : desktop)
 #### Step 3 : Go to this folder, right click and look for "Open with Code"
+![Capturex1](https://user-images.githubusercontent.com/53253487/87954705-4dccb300-cadf-11ea-9fe6-a19f6932152d.JPG)
+### Step 4 : 
