@@ -30,14 +30,14 @@
 ![CapturebElow](https://user-images.githubusercontent.com/53253487/87957007-4eb31400-cae2-11ea-9dc3-32384c9233f4.JPG)
 #### Note: If the patients temperature is higher or equal to 37 Cel, it will become red colour, below 37 Cel will display as blue
 
-#### Benefit:
+### Benefit
 ##### This project are easy to modify
 ##### The interface are simple and nice 
 ##### Able to set in dark mode
 
-#### Limitation 
+### Limitation 
 ##### There are some bug while populating the graph when the data updated in firebase, need to constantly point to the chart only can trigger the chart to update. There are no problem if using local random number to populate the chart, it able to update automatically.
 
-#### Future work
+### Future work
 ##### Think to use other database(SQL server) to populate the chart
 ##### Create other useful chart
